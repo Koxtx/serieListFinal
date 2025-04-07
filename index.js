@@ -3,8 +3,12 @@ const body = document.querySelector("body");
 const container = document.querySelector(".container");
 const form = document.querySelector("form");
 const input = document.querySelector("input");
+const btnVu = document.querySelector("#btnVu");
+const btnAvoir = document.querySelector("#btnAvoir");
+const btnTout = document.querySelector("#btnTout");
 
 let filteredSeries = [];
+
 const series = [
   {
     name: "Breaking Bad",
@@ -18,7 +22,6 @@ const series = [
   },
 ];
 
-console.log(series);
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   const value = input.value.trim();
@@ -38,6 +41,21 @@ form.addEventListener("submit", (event) => {
 
   input.value = "";
   addSerie(value);
+});
+
+btnVu.addEventListener("click", () => {
+  filteredSeries = series.filter((serie) => serie.seen);
+  displaySeries();
+});
+
+btnAvoir.addEventListener("click", () => {
+  filteredSeries = series.filter((serie) => !serie.seen);
+  displaySeries();
+});
+
+btnTout.addEventListener("click", () => {
+  filteredSeries = series;
+  displaySeries();
 });
 
 const displaySeries = () => {
@@ -188,7 +206,7 @@ const overImg = async (serie) => {
 
   try {
     const exists = await serieExists(imgPath);
-    img.src = exists ? imgPath : blackImgPathtImg;
+    img.src = exists ? imgPath : blackImgPath;
   } catch (error) {
     img.src = blackImgPath;
   }
@@ -207,31 +225,3 @@ const serieExists = (imgPath) => {
 
 div.append(img);
 body.append(div);
-
-const div2 = document.createElement("div");
-div2.style.paddingBottom = "20px";
-const btnVu = document.createElement("button");
-btnVu.innerText = "VU";
-btnVu.addEventListener("click", () => {
-  filteredSeries = series.filter((serie) => serie.seen);
-  displaySeries();
-});
-
-const btnAvoir = document.createElement("button");
-btnAvoir.innerText = "A VOIR";
-btnAvoir.addEventListener("click", () => {
-  filteredSeries = series.filter((serie) => !serie.seen);
-  displaySeries();
-});
-
-const btnTout = document.createElement("button");
-btnTout.innerText = "TOUT";
-
-btnTout.addEventListener("click", () => {
-  filteredSeries = series;
-  displaySeries();
-});
-
-div2.append(btnVu, btnAvoir, btnTout);
-
-container.prepend(div2);
